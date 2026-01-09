@@ -30,3 +30,18 @@ for i in range(10):
 # 5 - 10
 for j in range(5, 11):
   print(j)
+
+print("======= Arreglos =======")
+
+frutas = ["manzana", "pera", "fresa", "pera"]
+mixto = [1, 19.4, True, "hola", [1,2]]
+print(frutas)
+print(mixto[2])
+print(frutas[-1]) # ultimo elemento del arreglo
+print(frutas[-2])
+
+frutas.append("uva")
+frutas.insert(2, "kiwi")
+frutas.insert(10, "arandanos")
+frutas.remove("pera")
+print(frutas)
