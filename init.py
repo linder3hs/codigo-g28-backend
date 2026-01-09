@@ -22,3 +22,11 @@ print(nombre)
 print(edad, mensaje)
 print(es_mayor_edad)
 print(saldo)
+
+# 0 - 9
+for i in range(10):
+  print(i)
+
+# 5 - 10
+for j in range(5, 11):
+  print(j)
