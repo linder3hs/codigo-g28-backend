@@ -3,7 +3,7 @@ edad = int(input("Ingrese su edad: ")) # todo es un string (str)
 # cuando una variable es conformada por mas de una palabra usamo "_"
 es_mayor_edad = True | False
 # esMayorEdad = True
-saldo = 10.57
+saldo = float(input("Ingrese su saldo: "))
 
 """
 pueden colocar un comentario super largo.
