@@ -45,3 +45,19 @@ frutas.insert(2, "kiwi")
 frutas.insert(10, "arandanos")
 frutas.remove("pera")
 print(frutas)
+
+print("======= Funciones =======")
+def saludar():
+    print("Hola mundo!!")
+
+saludar()
+
+def saludar_persona(nombre):
+    print(f"Hola, {nombre}!!")
+
+saludar_persona("Juan")
+
+def sumar(n1, n2):
+    return n1 + n2
+
+print(sumar(1, 10))
