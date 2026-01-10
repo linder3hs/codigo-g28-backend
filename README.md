@@ -1,12 +1,28 @@
-# 📚 Primera Clase de Python - Grupo G28
+# 📚 Curso de Python Backend - Grupo G28
 
-## 📝 Resumen de la Clase
+## 📖 Descripción del Repositorio
 
-Este repositorio contiene los ejercicios y conceptos fundamentales vistos en nuestra primera clase de Python. A continuación se detalla todo lo aprendido.
+Este repositorio contiene todo el material desarrollado en el curso de Python Backend del Grupo G28. Cada carpeta representa una clase con sus respectivos ejercicios, conceptos y prácticas.
 
 ---
 
-## 🎯 Conceptos Fundamentales
+## 📂 Estructura del Proyecto
+
+```
+codigo-g28-backend/
+├── clase1/          # Fundamentos de Python
+├── clase2/          # Programación Orientada a Objetos (POO)
+└── README.md
+```
+
+---
+
+# 📘 Clase 1: Fundamentos de Python
+
+**Carpeta:** `clase1/`  
+**Fecha:** 8 de enero de 2026
+
+## 🎯 Temas Desarrollados
 
 ### 1. Variables y Tipos de Datos
 
@@ -36,18 +52,7 @@ nombre = input("Ingrese su nombre: ")         # Por defecto es string
 
 ⚠️ **Importante:** `input()` siempre retorna un string, por lo que debemos convertirlo al tipo de dato necesario.
 
-### 3. Comentarios
-
-```python
-# Comentario de una línea
-
-"""
-Comentario de múltiples líneas
-Útil para documentación extensa
-"""
-```
-
-### 4. Estructuras Condicionales
+### 3. Estructuras Condicionales
 
 ```python
 if edad >= 18:
@@ -56,18 +61,9 @@ else:
     mensaje = "Es menor de edad"
 ```
 
-**Operadores de comparación:**
+**Operadores de comparación:** `>=`, `<=`, `==`, `!=`, `>`, `<`
 
-- `>=` mayor o igual que
-- `<=` menor o igual que
-- `==` igual a
-- `!=` diferente de
-- `>` mayor que
-- `<` menor que
-
-### 5. Bucles (Loops)
-
-#### Bucle `for` con `range()`
+### 4. Bucles (Loops)
 
 ```python
 # Del 0 al 9
@@ -89,35 +85,27 @@ for k in range(2, 21, 2):
 - `range(inicio, fin)` → del inicio a fin-1
 - `range(inicio, fin, paso)` → del inicio a fin-1, con incrementos de "paso"
 
-### 6. Listas (Arrays)
+### 5. Listas (Arrays)
 
 ```python
 frutas = ["manzana", "pera", "fresa", "pera"]
 mixto = [1, 19.4, True, "hola", [1, 2]]
-```
 
-#### Acceso a elementos
-
-```python
-print(frutas[0])      # Primer elemento: "manzana"
-print(frutas[2])      # Tercer elemento: "fresa"
+# Acceso a elementos
+print(frutas[0])      # Primer elemento
 print(frutas[-1])     # Último elemento
-print(frutas[-2])     # Penúltimo elemento
-```
 
-#### Métodos de listas
-
-```python
+# Métodos de listas
 frutas.append("uva")              # Agregar al final
 frutas.insert(2, "kiwi")          # Insertar en posición específica
 frutas.remove("pera")             # Eliminar primera ocurrencia
-len(frutas)                       # Obtener longitud de la lista
-sum(notas)                        # Sumar todos los elementos (números)
-max(numeros)                      # Obtener el valor máximo
-min(numeros)                      # Obtener el valor mínimo
+len(frutas)                       # Obtener longitud
+sum(notas)                        # Sumar elementos
+max(numeros)                      # Valor máximo
+min(numeros)                      # Valor mínimo
 ```
 
-### 7. Funciones
+### 6. Funciones
 
 ```python
 # Función sin parámetros
@@ -133,180 +121,31 @@ def sumar(n1, n2):
     return n1 + n2
 ```
 
-### 8. F-Strings (Formateo de Cadenas)
-
-Los f-strings permiten concatenar variables de forma más sencilla:
+### 7. F-Strings (Formateo de Cadenas)
 
 ```python
 nombre = "Juan"
 edad = 25
 print(f"Hola, {nombre}!! Tienes {edad} años")
-print(f"La suma es: {numero1 + numero2}")
 ```
 
-### 9. Operadores Aritméticos
-
-```python
-suma = numero1 + numero2
-resta = numero1 - numero2
-multiplicacion = numero1 * numero2
-division = numero1 / numero2
-modulo = numero % 2              # Resto de la división
-```
-
----
-
-## 💻 Ejercicios Realizados
-
-### Problema 1: Calculadora Simple
-
-**Archivo:** `problema1.py`
-
-Calculadora que pide dos números y muestra:
-
-- Suma
-- Resta
-- Multiplicación
-- División (con validación para evitar división entre 0)
-
-**Conceptos aplicados:** Variables, input, operadores aritméticos, condicionales, f-strings
-
----
-
-### Problema 2: Tabla de Multiplicar
-
-**Archivo:** `problema2.py`
-
-Programa que pide un número y muestra su tabla de multiplicar del 1 al 10.
-
-**Conceptos aplicados:** Bucle for, range, f-strings
-
----
-
-### Problema 3: Números Pares
-
-**Archivo:** `problema3.py`
-
-Imprime todos los números pares del 2 al 20 usando dos métodos:
-
-1. Usando `range()` con paso de 2
-2. Usando el operador módulo `%` para verificar si es par
-
-**Conceptos aplicados:** Bucles, range con paso, operador módulo, condicionales
-
----
-
-### Problema 4: Suma Acumulativa
-
-**Archivo:** `problema4.py`
-
-Calcula la suma de los números del 1 al 100.
-
-**Conceptos aplicados:** Bucles, acumuladores, operador `+=`
-
----
-
-### Problema 5: Lista de Nombres
-
-**Archivo:** `problema5.py`
-
-Crea una lista vacía, pide 5 nombres al usuario y los agrega a la lista. Al final muestra todos los nombres y la cantidad.
-
-**Conceptos aplicados:** Listas, append, len, bucles
-
----
-
-### Problema 6: Promedio de Notas
-
-**Archivo:** `problema6.py`
-
-Pide 6 notas al usuario, las guarda en una lista y calcula el promedio.
-
-**Conceptos aplicados:** Listas, append, sum, len, división
-
----
-
-### Problema 7: Mayor y Menor
-
-**Archivo:** `problema7.py`
-
-Crea una lista con 8 números ingresados por el usuario y encuentra el mayor y el menor.
-
-**Conceptos aplicados:** Listas, funciones max y min
-
----
-
-### Problema 8: Área de Rectángulo
-
-**Archivo:** `problema8.py`
-
-Crea una función `calcular_area(base, altura)` que calcula el área de un rectángulo.
-
-**Fórmula:** `área = base × altura`
-
-**Conceptos aplicados:** Funciones con parámetros, return, input
-
----
-
-### Problema 9: Contador de Vocales
-
-**Archivo:** `problema9.py`
-
-Función `contar_vocales(texto)` que cuenta las vocales en un texto (mayúsculas y minúsculas).
-
-**Conceptos aplicados:** Funciones, iteración sobre strings, operador `in`, contadores
-
----
-
-### Problema 10: Número Primo
-
-**Archivo:** `problema10.py`
-
-Función `es_primo(numero)` que determina si un número es primo.
-
-**Lógica:**
-
-- Si el número es menor que 2, no es primo
-- Se verifica si el número es divisible por algún número entre 2 y el número-1
-- Si encuentra un divisor, no es primo
-
-**Conceptos aplicados:** Funciones, bucles, condicionales, return, validaciones
-
----
-
-## 🚀 Cómo Ejecutar los Archivos
-
-Para ejecutar cualquier archivo Python, usa el siguiente comando en la terminal:
-
-```bash
-python nombre_archivo.py
-```
-
-Por ejemplo:
-
-```bash
-python init.py
-python problema1.py
-python problema10.py
-```
-
----
-
-## 📌 Notas Importantes
-
-1. **Indentación:** Python usa indentación (espacios o tabs) para definir bloques de código. Es fundamental mantener una indentación consistente.
-
-2. **Todo es un objeto:** En Python, todo es un objeto, incluyendo números, strings, listas, etc.
-
-3. **Tipado dinámico:** No es necesario declarar el tipo de una variable, Python lo infiere automáticamente.
-
-4. **Listas son mutables:** Podemos modificar, agregar o eliminar elementos de una lista después de crearla.
-
-5. **Índices negativos:** Python permite usar índices negativos para acceder a elementos desde el final de una lista.
-
----
-
-## 🎓 Conceptos Clave Aprendidos
+## 💻 Ejercicios Realizados - Clase 1
+
+| Archivo         | Descripción                                                | Conceptos                                                  |
+| --------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| `init.py`       | Archivo de demostración con todos los conceptos básicos    | Variables, input, condicionales, bucles, listas, funciones |
+| `problema1.py`  | Calculadora simple (suma, resta, multiplicación, división) | Variables, input, operadores aritméticos, condicionales    |
+| `problema2.py`  | Tabla de multiplicar                                       | Bucle for, range, f-strings                                |
+| `problema3.py`  | Números pares del 2 al 20                                  | Bucles, range con paso, operador módulo                    |
+| `problema4.py`  | Suma de números del 1 al 100                               | Bucles, acumuladores, operador `+=`                        |
+| `problema5.py`  | Lista de 5 nombres ingresados por el usuario               | Listas, append, len, bucles                                |
+| `problema6.py`  | Promedio de 6 notas                                        | Listas, append, sum, len                                   |
+| `problema7.py`  | Mayor y menor de 8 números                                 | Listas, funciones max y min                                |
+| `problema8.py`  | Área de un rectángulo                                      | Funciones con parámetros, return                           |
+| `problema9.py`  | Contador de vocales en un texto                            | Funciones, iteración sobre strings, operador `in`          |
+| `problema10.py` | Verificar si un número es primo                            | Funciones, bucles, condicionales, validaciones             |
+
+## 🎓 Conceptos Clave - Clase 1
 
 ✅ Variables y tipos de datos (int, float, str, bool)  
 ✅ Entrada y salida de datos (input, print)  
@@ -321,13 +160,237 @@ python problema10.py
 
 ---
 
+# 📗 Clase 2: Programación Orientada a Objetos (POO)
+
+**Carpeta:** `clase2/`  
+**Fecha:** 9 de enero de 2026
+
+## 🎯 Temas Desarrollados
+
+### 1. Clases y Objetos
+
+**Concepto:** Una clase es una plantilla o molde que representa algo de la vida real en código. Un objeto es cuando usamos esa clase (instanciar).
+
+```python
+class Auto:
+    # Atributos de clase
+    ruedas = 4
+    numero_puertas = 5
+
+    # Constructor: parámetros que recibe la clase
+    def __init__(self, marca, modelo, hp):
+        self.marca = marca
+        self.modelo = modelo
+        self.hp = hp
+        self.color = "rojo"
+
+    # Método
+    def describir_auto(self):
+        print(f"Marca: {self.marca}, Modelo: {self.modelo}, HP: {self.hp}")
+
+# Instanciar la clase (crear objetos)
+auto1 = Auto("Jepp", "Compass", 165)
+auto2 = Auto("Nissan", "Kicks", 120)
+```
+
+**Conceptos clave:**
+
+- **Clase:** Plantilla o molde
+- **Objeto:** Instancia de una clase
+- **Atributos:** Características de la clase
+- **Métodos:** Funciones dentro de una clase
+- **Constructor (`__init__`):** Método especial que se ejecuta al crear un objeto
+
+### 2. Encapsulamiento
+
+Python tiene 3 niveles de acceso a atributos:
+
+```python
+class CuentaBancaria:
+    def __init__(self, titular, saldo, pin, email, dni):
+        # Público
+        self.titular = titular
+
+        # Protegido (se usa solo dentro de la clase)
+        self._saldo = saldo
+        self._email = email
+        self._dni = dni
+
+        # Privado (no se puede acceder desde fuera)
+        self.__pin = pin
+```
+
+**Niveles de encapsulamiento:**
+
+- **Público:** `self.atributo` - Accesible desde cualquier lugar
+- **Protegido:** `self._atributo` - Convención para uso interno (técnicamente accesible)
+- **Privado:** `self.__atributo` - No accesible directamente desde fuera de la clase
+
+**Ejemplo práctico:**
+
+```python
+cuenta = CuentaBancaria("Linder", 1000, 1234, "linder@gmail.com", "8888888")
+cuenta.depositar(1500)
+cuenta.retirar(1234, 2000)
+cuenta.ver_saldo()
+```
+
+### 3. Herencia
+
+La herencia permite crear clases que heredan atributos y métodos de otras clases.
+
+```python
+# Clase Padre
+class Animal:
+    def __init__(self, nombre, edad, peso):
+        self.nombre = nombre
+        self.edad = edad
+        self.peso = peso
+
+    def comer(self):
+        print(f"El animal {self.nombre}, esta comiendo")
+
+    def dormir(self):
+        print(f"El animal {self.nombre}, esta durmiendo")
+
+# Clase Hija
+class Perro(Animal):
+    def ladrar(self):
+        print("Gua Gua")
+
+class Gato(Animal):
+    def rasgar(self):
+        print("Rasgando un mueble")
+
+# Uso
+perro1 = Perro("Oso", 10, 14)
+perro1.comer()      # Método heredado
+perro1.ladrar()     # Método propio
+```
+
+### 4. Super() - Herencia Avanzada
+
+`super()` permite acceder a métodos de la clase padre desde la clase hija.
+
+```python
+class Vehiculo:
+    def __init__(self, marca, modelo, anio):
+        self.marca = marca
+        self.modelo = modelo
+        self.anio = anio
+
+    def mostrar_informacion(self):
+        return f"Marca: {self.marca}, Modelo: {self.modelo}, Año: {self.anio}"
+
+class Auto(Vehiculo):
+    def __init__(self, marca, modelo, anio, cilindrada, color):
+        # Llamar al constructor del padre
+        super().__init__(marca, modelo, anio)
+        self.cilindrada = cilindrada
+        self.color = color
+
+    def mostrar_informacion(self):
+        # Llamar al método del padre y extenderlo
+        mensaje = super().mostrar_informacion()
+        print(f"{mensaje}, Cilindrada: {self.cilindrada}, Color: {self.color}")
+```
+
+## 💻 Ejercicios Realizados - Clase 2
+
+| Archivo              | Descripción                                | Conceptos                                                            |
+| -------------------- | ------------------------------------------ | -------------------------------------------------------------------- |
+| `init.py`            | Clase Auto con atributos y métodos básicos | Clases, objetos, constructor, métodos, instanciación                 |
+| `calculadora.py`     | Calculadora con historial de operaciones   | Clases, atributos de instancia, métodos, listas, validaciones        |
+| `cuenta_bancaria.py` | Sistema de cuenta bancaria con operaciones | Encapsulamiento (público, protegido, privado), métodos, validaciones |
+| `herencia.py`        | Sistema de animales con herencia           | Herencia básica, clase padre, clases hijas                           |
+| `herencia_2.py`      | Sistema de vehículos con `super()`         | Herencia avanzada, `super()`, sobrescritura de métodos               |
+| `problema1.py`       | Mascota Virtual (alimentar, jugar)         | Clases, métodos, atributos con valores por defecto, validaciones     |
+| `problema2.py`       | Figuras Geométricas (Cuadrado y Círculo)   | Herencia, `super()`, módulo math, cálculos matemáticos               |
+
+## 📝 Detalles de Ejercicios - Clase 2
+
+### Calculadora (`calculadora.py`)
+
+- **Funcionalidad:** Realiza operaciones matemáticas y guarda un historial
+- **Métodos:** `sumar()`, `restar()`, `multiplicar()`, `division()`, `imprimir()`
+- **Características:** Validación de división por cero, historial de operaciones
+
+### Cuenta Bancaria (`cuenta_bancaria.py`)
+
+- **Funcionalidad:** Simula una cuenta bancaria con operaciones básicas
+- **Métodos:** `depositar()`, `retirar()`, `ver_saldo()`
+- **Características:** Validación de PIN, validación de saldo, encapsulamiento de datos sensibles
+
+### Problema 1: Mascota Virtual (`problema1.py`)
+
+- **Atributos:** nombre, tipo, hambre (0-10), felicidad (0-10)
+- **Métodos:** `alimentar()`, `jugar()`, `mostrar_informacion()`
+- **Características:** Validaciones de límites, valores por defecto
+
+### Problema 2: Figuras Geométricas (`problema2.py`)
+
+- **Clase Padre:** `Figura` con método `pintar()`
+- **Clases Hijas:** `Cuadrado` y `Circulo` con método `calcular_area()`
+- **Características:** Uso de módulo `math`, herencia, `super()`
+
+## 🎓 Conceptos Clave - Clase 2
+
+✅ Clases y Objetos  
+✅ Constructor (`__init__`)  
+✅ Atributos de clase e instancia  
+✅ Métodos  
+✅ Encapsulamiento (público, protegido, privado)  
+✅ Herencia  
+✅ `super()` para acceder a la clase padre  
+✅ Sobrescritura de métodos  
+✅ Type hints (anotaciones de tipo)  
+✅ Validaciones en métodos
+
+---
+
+## 🚀 Cómo Ejecutar los Archivos
+
+Para ejecutar cualquier archivo Python, usa el siguiente comando en la terminal:
+
+```bash
+# Clase 1
+python clase1/init.py
+python clase1/problema1.py
+
+# Clase 2
+python clase2/init.py
+python clase2/calculadora.py
+python clase2/cuenta_bancaria.py
+```
+
+---
+
+## 📌 Notas Importantes
+
+1. **Indentación:** Python usa indentación (espacios o tabs) para definir bloques de código. Es fundamental mantener una indentación consistente.
+
+2. **Todo es un objeto:** En Python, todo es un objeto, incluyendo números, strings, listas, funciones y clases.
+
+3. **Tipado dinámico:** No es necesario declarar el tipo de una variable, Python lo infiere automáticamente.
+
+4. **PEP 8:** Convención de estilo de código en Python (snake_case para variables y funciones, PascalCase para clases).
+
+5. **Encapsulamiento:** Aunque Python permite acceder a atributos "protegidos" y "privados", es una mala práctica hacerlo.
+
+---
+
 ## 📚 Recursos Adicionales
 
 - [Documentación oficial de Python](https://docs.python.org/es/3/)
 - [Tutorial de Python en español](https://docs.python.org/es/3/tutorial/)
+- [PEP 8 - Guía de estilo](https://peps.python.org/pep-0008/)
+- [Real Python - OOP Tutorial](https://realpython.com/python3-object-oriented-programming/)
 
 ---
 
-**Fecha:** 8 de enero de 2026  
+## 👨‍💻 Información del Curso
+
 **Grupo:** G28 Backend  
-**Instructor:** Linder
+**Instructor:** Linder  
+**Inicio:** 8 de enero de 2026  
+**Última actualización:** 9 de enero de 2026
