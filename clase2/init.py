@@ -6,6 +6,10 @@ Objeto: es cuando usamos la clase (instanciar)
 
 # Clase Auto
 class Auto:
+    # atributos
+    ruedas = 4
+    numero_puertas = 5
+
     # constructor: son los parametros que recibe la clase
     def __init__(self, marca, modelo, hp):
         self.marca = marca
@@ -24,6 +28,7 @@ INSTANCIAR, recuerden que se puede instanciar una clase n
 veces
 """
 auto1 = Auto("Jepp", "Compass", 165)
+print(auto1.modelo, auto1.ruedas)
 auto1.describir_auto()
 auto2 = Auto("Nissan", "Kicks", 120)
 auto2.describir_auto()
