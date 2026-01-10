@@ -16,7 +16,7 @@ Privada:
 """
 
 class CuentaBancaria:
-    def __init__(self, titular, saldo, pin, email, dni):
+    def __init__(self, titular: str, saldo: float, pin: int, email, dni):
         self.titular = titular
         # protegido: saldo, email, dni
         self._saldo = saldo
