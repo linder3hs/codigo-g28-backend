@@ -46,6 +46,20 @@ def crear_tarea():
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
 
+
+@app.route('/api/tareas/<int:id>', methods=['PUT'])
+def actualizar_tarea(id):
+    try:
+        payload = request.get_json()
+        for tarea in tareas:
+            if tarea['id'] == id:
+                tarea['titulo'] = payload.get('titulo', tarea['titulo'])
+                tarea['completado'] = payload.get('completado', tarea['completado'])
+                return jsonify({'ok': True, 'data': tarea})
+        return jsonify({'ok': False, 'message': 'Tarea no encontrado'}), 404
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
 app.run(debug=True)
