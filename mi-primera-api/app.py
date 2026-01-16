@@ -1,5 +1,5 @@
 # importar Flask
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 # instanciar Flask
 # __name__ == __main__
@@ -29,6 +29,19 @@ def obtener_tarea(id):
         if tarea['id'] == id:
             return jsonify({'ok': True, 'data': tarea})
     return jsonify({'ok': False, 'message': 'Tarea no encontrada'}), 404
+
+
+# Crear una nueva tarea
+@app.route('/api/tareas', methods=['POST'])
+def crear_tarea():
+    payload = request.get_json()
+    nueva_tarea = {
+        'id': len(tareas) + 1,
+        'titulo': payload['titulo'],
+        'completado': False
+    }
+    tareas.append(nueva_tarea)
+    return jsonify({'ok': True, 'data': nueva_tarea}), 201
 
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
