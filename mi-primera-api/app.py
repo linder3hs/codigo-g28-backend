@@ -34,14 +34,17 @@ def obtener_tarea(id):
 # Crear una nueva tarea
 @app.route('/api/tareas', methods=['POST'])
 def crear_tarea():
-    payload = request.get_json()
-    nueva_tarea = {
-        'id': len(tareas) + 1,
-        'titulo': payload['titulo'],
-        'completado': False
-    }
-    tareas.append(nueva_tarea)
-    return jsonify({'ok': True, 'data': nueva_tarea}), 201
+    try:
+        payload = request.get_json()
+        nueva_tarea = {
+            'id': len(tareas) + 1,
+            'titulo': payload['titulo'],
+            'completado': False
+        }
+        tareas.append(nueva_tarea)
+        return jsonify({'ok': True, 'data': nueva_tarea}), 201
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
 
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
