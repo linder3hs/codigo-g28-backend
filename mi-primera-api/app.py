@@ -60,6 +60,20 @@ def actualizar_tarea(id):
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
 
+
+@app.route('/api/tareas/<int:id>', methods=['DELETE'])
+def eliminar_tarea(id):
+    try:
+        for tarea in tareas:
+            if tarea['id'] == id:
+                tareas.remove(tarea)
+                return jsonify({'ok': True, 'message': 'Tarea eliminada de forma exitosa'})
+        return jsonify({'ok': False, 'message': 'Tarea no encontrado'}), 404
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
+
+
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
 app.run(debug=True)
