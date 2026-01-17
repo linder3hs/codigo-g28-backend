@@ -30,5 +30,5 @@ class Tarea(db.Model):
             'id': self.id,
             'titulo': self.titulo,
             'completado': self.completado,
-            'fecha_creacion': self.fecha_creacion.isformat()
+            'fecha_creacion': self.fecha_creacion.isoformat()
         }

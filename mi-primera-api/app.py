@@ -32,7 +32,15 @@ tareas = [
 # Lista todas las tareas
 @app.route('/api/tareas')
 def obtener_tareas():
-    return jsonify({'ok': True, 'data': tareas})
+    try:
+        tareas = Tarea.query.all()
+        return jsonify({
+            'ok': True,
+            'data': [tarea.to_dict() for tarea in tareas]
+        })
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
 
 
 # Busca la tarea por id
