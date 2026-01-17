@@ -79,12 +79,19 @@ def crear_tarea():
 def actualizar_tarea(id):
     try:
         payload = request.get_json()
-        for tarea in tareas:
-            if tarea['id'] == id:
-                tarea['titulo'] = payload.get('titulo', tarea['titulo'])
-                tarea['completado'] = payload.get('completado', tarea['completado'])
-                return jsonify({'ok': True, 'data': tarea})
-        return jsonify({'ok': False, 'message': 'Tarea no encontrado'}), 404
+        tarea = Tarea.query.get(id)
+
+        if tarea is None:
+            return jsonify({'ok': False, 'message': 'Tarea no encontrada'}), 404
+
+        if 'titulo' in payload:
+            tarea.titulo = payload.get('titulo')
+
+        if 'completado' in payload:
+            tarea.completado = payload.get('completado')
+
+        db.session.commit()
+        return jsonify({'ok': True, 'data': tarea.to_dict()})
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
 
