@@ -1,9 +1,22 @@
 # importar Flask
 from flask import Flask, jsonify, request
+import os
+from dotenv import load_dotenv
+
+# import la db y la tabla tareas
+from models import db, Tarea
+
+# cargar las variables de entorno
+load_dotenv()
 
 # instanciar Flask
 # __name__ == __main__
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db.init_app(app)
 
 # Ya podemos crear endpoints (rutas)
 @app.route("/") # raiz
