@@ -66,7 +66,10 @@ def crear_tarea():
             return jsonify({'ok': False, 'message': 'El titulo es requerido'}), 400
 
         # Guardar un registro en la base de datos
-        nueva_tarea = Tarea(titulo=payload.get('titulo'))
+        nueva_tarea = Tarea(
+            titulo=payload.get('titulo'),
+            descripcion=payload.get('descripcion')
+        )
         db.session.add(nueva_tarea)
         db.session.commit()
 
@@ -99,11 +102,13 @@ def actualizar_tarea(id):
 @app.route('/api/tareas/<int:id>', methods=['DELETE'])
 def eliminar_tarea(id):
     try:
-        for tarea in tareas:
-            if tarea['id'] == id:
-                tareas.remove(tarea)
-                return jsonify({'ok': True, 'message': 'Tarea eliminada de forma exitosa'})
-        return jsonify({'ok': False, 'message': 'Tarea no encontrado'}), 404
+        tarea = Tarea.query.get(id)
+        if tarea is None:
+            return jsonify({'ok': False, 'message': 'Tarea no encontrado'}), 404
+
+        db.session.delete(tarea)
+        db.session.commit()
+        return jsonify({'ok': True, 'message': 'Tarea eliminada de forma exitosa'})
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
 

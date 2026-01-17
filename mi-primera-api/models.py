@@ -19,6 +19,7 @@ class Tarea(db.Model):
     # atributos de la tabla (columnas)
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
+    descripcion = db.Column(db.Text)
     completado = db.Column(db.Boolean, default=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -29,6 +30,7 @@ class Tarea(db.Model):
         return {
             'id': self.id,
             'titulo': self.titulo,
+            'descripcion': self.descripcion,
             'completado': self.completado,
             'fecha_creacion': self.fecha_creacion.isoformat()
         }
