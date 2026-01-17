@@ -89,4 +89,11 @@ def eliminar_tarea(id):
 
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
-app.run(debug=True)
+# se requiere hacer una configuración extra para que nuestras tablas se creen de forma automatica
+if __name__ == "__main__":
+    # crear las tablas
+    with app.app_context():
+        db.create_all()
+        print("Base de datos conectada!")
+        print("Tablas creadas!")
+    app.run(debug=True)

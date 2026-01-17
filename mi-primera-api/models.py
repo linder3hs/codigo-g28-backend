@@ -19,7 +19,7 @@ class Tarea(db.Model):
     # atributos de la tabla (columnas)
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
-    completado = db.Column(db.Bolean, default=False)
+    completado = db.Column(db.Boolean, default=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
