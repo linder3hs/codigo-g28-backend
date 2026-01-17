@@ -60,13 +60,17 @@ def obtener_tarea(id):
 def crear_tarea():
     try:
         payload = request.get_json()
-        nueva_tarea = {
-            'id': len(tareas) + 1,
-            'titulo': payload['titulo'],
-            'completado': False
-        }
-        tareas.append(nueva_tarea)
-        return jsonify({'ok': True, 'data': nueva_tarea}), 201
+
+        # validacion titulo
+        if not payload.get('titulo'):
+            return jsonify({'ok': False, 'message': 'El titulo es requerido'}), 400
+
+        # Guardar un registro en la base de datos
+        nueva_tarea = Tarea(titulo=payload.get('titulo'))
+        db.session.add(nueva_tarea)
+        db.session.commit()
+
+        return jsonify({'ok': True, 'data': nueva_tarea.to_dict()}), 201
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
 
