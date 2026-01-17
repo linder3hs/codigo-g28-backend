@@ -46,10 +46,13 @@ def obtener_tareas():
 # Busca la tarea por id
 @app.route('/api/tareas/<int:id>')
 def obtener_tarea(id):
-    for tarea in tareas:
-        if tarea['id'] == id:
-            return jsonify({'ok': True, 'data': tarea})
-    return jsonify({'ok': False, 'message': 'Tarea no encontrada'}), 404
+    try:
+        tarea = Tarea.query.get(id)
+        if tarea is None:
+            return jsonify({'ok': False, 'message': 'Tarea no encontrada'}), 404
+        return jsonify({'ok': True, 'data': tarea.to_dict()})
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
 
 
 # Crear una nueva tarea
