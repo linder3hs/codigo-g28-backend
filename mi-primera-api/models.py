@@ -51,11 +51,11 @@ class Tarea(db.Model):
     # cuando creemos o actualicemo una tarea sera necesario incluir el campo (columano) user_id
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
-    def to_dict(self):
+    def to_dict(self, incluir_usuario=False):
         """
         Convertir el objeto a un diccionario JSON
         """
-        return {
+        data = {
             'id': self.id,
             'titulo': self.titulo,
             'descripcion': self.descripcion,
@@ -63,3 +63,11 @@ class Tarea(db.Model):
             'usuario_id': self.usuario_id,
             'fecha_creacion': self.fecha_creacion.isoformat()
         }
+
+        if incluir_usuario:
+            data['usuario'] = {
+                'id': self.usuario.id,
+                'nombre': self.usuario.nombre,
+                'email': self.usuario.email
+            }
+        return data

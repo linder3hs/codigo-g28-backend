@@ -45,7 +45,7 @@ def obtener_tareas():
         tareas = Tarea.query.filter_by(usuario_id=usuario_id).all()
         return jsonify({
             'ok': True,
-            'data': [tarea.to_dict() for tarea in tareas]
+            'data': [tarea.to_dict(True) for tarea in tareas]
         })
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
