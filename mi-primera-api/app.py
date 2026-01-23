@@ -180,7 +180,7 @@ def login():
         # buscar al usuario en la base de datos
         usuario = Usuario.query.filter_by(email=payload.get('email')).first()
 
-        if not usuario or usuario.password != payload.get('password'):
+        if not usuario or not check_password_hash(usuario.password, payload.get('password')):
             return jsonify({'ok': False, 'message': 'Email y/o incorrectos'}), 400
 
         return jsonify({
