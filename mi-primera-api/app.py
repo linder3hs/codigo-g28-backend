@@ -158,6 +158,35 @@ def registro():
         }), 201
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
+    
+
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """
+    email, password
+    """
+    try:
+        payload = request.get_json()
+
+        if not payload.get('email'):
+            return jsonify({'ok': False, 'message': 'El email es requerido'}), 400
+
+        if not payload.get('password'):
+            return jsonify({'ok': False, 'message': 'El password es requerido'}), 400
+
+        # buscar al usuario en la base de datos
+        usuario = Usuario.query.filter_by(email=payload.get('email')).first()
+
+        if not usuario or usuario.password != payload.get('password'):
+            return jsonify({'ok': False, 'message': 'Email y/o incorrectos'}), 400
+
+        return jsonify({
+            'ok': True,
+            'message': 'Bienvenido!',
+            'data': usuario.to_dict()
+        })
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
 
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
