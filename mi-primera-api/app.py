@@ -197,7 +197,7 @@ def login():
         return jsonify({
             'ok': True,
             'message': 'Bienvenido!',
-            'data': usuario.to_dict()
+            'data': usuario.to_dict(True)
         })
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500

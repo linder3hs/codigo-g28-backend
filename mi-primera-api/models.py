@@ -26,13 +26,18 @@ class Usuario(db.Model):
     # relacion entre usuario y tareas
     tareas = db.relationship('Tarea', backref='usuario', lazy=True)
 
-    def to_dict(self):
-        return {
+    def to_dict(self, incluir_tareas=False):
+        data = {
             'id': self.id,
             'nombre': self.nombre,
             'email': self.email,
             'fecha_creacion': self.fecha_creacion.isoformat()
         }
+
+        if incluir_tareas:
+            data['tareas'] = [tarea.to_dict() for tarea in self.tareas]
+            data['total_tarea'] = len(self.tareas)
+        return data
 
 class Tarea(db.Model):
     """
