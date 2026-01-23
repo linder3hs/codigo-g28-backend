@@ -72,10 +72,15 @@ def crear_tarea():
         if not payload.get('titulo'):
             return jsonify({'ok': False, 'message': 'El titulo es requerido'}), 400
 
+        if not payload.get('usuario_id'):
+            return jsonify({'ok': False, 'message': 'La tarea debe estar asociada a un usuario'}), 400
+
         # Guardar un registro en la base de datos
         nueva_tarea = Tarea(
             titulo=payload.get('titulo'),
-            descripcion=payload.get('descripcion')
+            descripcion=payload.get('descripcion'),
+            categoria=payload.get('categoria', ''),
+            usuario_id=payload.get('usuario_id')
         )
         db.session.add(nueva_tarea)
         db.session.commit()
