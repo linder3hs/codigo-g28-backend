@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 # import la db y la tabla tareas
-from models import db, Tarea
+from models import db, Tarea, Usuario
 # importar flask-migrate
 from flask_migrate import Migrate
 
@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
 db.init_app(app)
 
@@ -118,6 +119,45 @@ def eliminar_tarea(id):
         return jsonify({'ok': False, 'message': str(e)}), 500
 
 
+# nuevos endpoint para usuarios
+@app.route("/api/auth/registro", methods=['POST'])
+def registro():
+    """
+    nombre, email, password
+    """
+    try:
+        payload = request.get_json()
+        # validaciones
+        if not payload.get('nombre'):
+            return jsonify({'ok': False, 'message': 'El nombre es requerido'}), 400
+
+        if not payload.get('email'):
+            return jsonify({'ok': False, 'message': 'El email es requerido'}), 400
+
+        if not payload.get('password'):
+            return jsonify({'ok': False, 'message': 'El password es requerido'}), 400
+
+        usuario_existente = Usuario.query.filter_by(email=payload.get('email')).first()
+
+        if usuario_existente:
+            return jsonify({'ok': False, 'message': 'El email ya fue registrado'}), 400
+
+        # si llego hasta acá es un nuevo usuario y cumple con las validaciones
+        nuevo_usuario = Usuario(
+            nombre=payload.get('nombre'),
+            email=payload.get('email'),
+            password=payload.get('password')
+        )
+        db.session.add(nuevo_usuario)
+        db.session.commit()
+
+        return jsonify({
+            'ok': True,
+            'message': 'Usuario creado correctamente',
+            'data': nuevo_usuario.to_dict()
+        }), 201
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
 
 # iniciar un servidor donde se ejecute
 # debug=True Modo desarrollo, por ende el servidor se reinicia solo
