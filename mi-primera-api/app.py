@@ -2,6 +2,7 @@
 from flask import Flask, jsonify, request
 import os
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # import la db y la tabla tareas
 from models import db, Tarea, Usuario
@@ -143,10 +144,12 @@ def registro():
             return jsonify({'ok': False, 'message': 'El email ya fue registrado'}), 400
 
         # si llego hasta acá es un nuevo usuario y cumple con las validaciones
+        password_hash = generate_password_hash(payload.get('password'))
+        
         nuevo_usuario = Usuario(
             nombre=payload.get('nombre'),
             email=payload.get('email'),
-            password=payload.get('password')
+            password=password_hash
         )
         db.session.add(nuevo_usuario)
         db.session.commit()
