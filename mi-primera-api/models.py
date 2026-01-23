@@ -23,6 +23,9 @@ class Usuario(db.Model):
     password = db.Column(db.String(255), nullable=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # relacion entre usuario y tareas
+    tareas = db.relationship('Tarea', backref='usuario', lazy=True)
+
     def to_dict(self):
         return {
             'id': self.id,
@@ -45,6 +48,8 @@ class Tarea(db.Model):
     categoria = db.Column(db.String(100))
     completado = db.Column(db.Boolean, default=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    # cuando creemos o actualicemo una tarea sera necesario incluir el campo (columano) user_id
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
 
     def to_dict(self):
         """
@@ -55,5 +60,6 @@ class Tarea(db.Model):
             'titulo': self.titulo,
             'descripcion': self.descripcion,
             'completado': self.completado,
+            'usuario_id': self.usuario_id,
             'fecha_creacion': self.fecha_creacion.isoformat()
         }
