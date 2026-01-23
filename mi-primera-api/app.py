@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 # import la db y la tabla tareas
 from models import db, Tarea
+# importar flask-migrate
+from flask_migrate import Migrate
 
 # cargar las variables de entorno
 load_dotenv()
@@ -17,6 +19,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+# instaciar Migrate
+migrate = Migrate(app, db)
 
 # Ya podemos crear endpoints (rutas)
 @app.route("/") # raiz
@@ -119,8 +124,9 @@ def eliminar_tarea(id):
 # se requiere hacer una configuración extra para que nuestras tablas se creen de forma automatica
 if __name__ == "__main__":
     # crear las tablas
-    with app.app_context():
-        db.create_all()
-        print("Base de datos conectada!")
-        print("Tablas creadas!")
+    # with app.app_context():
+    #     db.create_all()
+    #     print("Base de datos conectada!")
+    #     print("Tablas creadas!")
+    # Hemos comentado esta seccion porque ahora Migrate se encarga de la DB
     app.run(debug=True)
