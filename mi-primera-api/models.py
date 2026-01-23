@@ -9,6 +9,28 @@ from datetime import datetime
 # db = data base
 db = SQLAlchemy()
 
+class Usuario(db.Model):
+    """
+    Model de Usuario
+    representa a la tabla usuarios
+    """
+    __tablename__ = "usuarios"
+
+    # columnas
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(200), unique=True, nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'email': self.email,
+            'fecha_creacion': self.fecha_creacion.isoformat()
+        }
+
 class Tarea(db.Model):
     """
     Modelo de Tarea
@@ -20,6 +42,7 @@ class Tarea(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
     descripcion = db.Column(db.Text)
+    categoria = db.Column(db.String(100))
     completado = db.Column(db.Boolean, default=False)
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
