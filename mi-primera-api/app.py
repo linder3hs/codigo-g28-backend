@@ -1,5 +1,5 @@
 # importar Flask
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, session
 import os
 from dotenv import load_dotenv
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -40,7 +40,9 @@ tareas = [
 @app.route('/api/tareas')
 def obtener_tareas():
     try:
-        tareas = Tarea.query.all()
+        # obtener el id de usuario en session
+        usuario_id = session['usuario_id']
+        tareas = Tarea.query.filter_by(usuario_id=usuario_id).all()
         return jsonify({
             'ok': True,
             'data': [tarea.to_dict() for tarea in tareas]
@@ -187,6 +189,10 @@ def login():
 
         if not usuario or not check_password_hash(usuario.password, payload.get('password')):
             return jsonify({'ok': False, 'message': 'Email y/o incorrectos'}), 400
+
+        # Guardar en session el id y el email del usuario
+        session['usuario_id'] = usuario.id
+        session['usuairo_email'] = usuario.email
 
         return jsonify({
             'ok': True,
