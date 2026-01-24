@@ -42,7 +42,7 @@ def registro():
         db.session.commit()
 
         # crear el token
-        access_token = create_access_token(identity=nuevo_usuario.id)
+        access_token = create_access_token(identity=str(nuevo_usuario.id))
 
         return jsonify({
             'ok': True,
@@ -74,10 +74,13 @@ def login():
         if not usuario or not check_password_hash(usuario.password, payload.get('password')):
             return jsonify({'ok': False, 'message': 'Email y/o incorrectos'}), 400
 
+        # crear el token
+        access_token = create_access_token(identity=str(usuario.id))
         return jsonify({
             'ok': True,
             'message': 'Bienvenido!',
-            'data': usuario.to_dict(True)
+            'data': usuario.to_dict(),
+            'access_token': access_token
         })
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500

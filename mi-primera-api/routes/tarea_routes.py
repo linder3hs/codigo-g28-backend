@@ -1,16 +1,18 @@
 from flask import Blueprint, jsonify, request
 from extensions import db
-from models import Tarea, Usuario
+from models import Tarea
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # creamos el blue print
 tareas_bp = Blueprint('tareas', __name__, url_prefix='/api/tareas')
 
 # Lista todas las tareas
 @tareas_bp.route('/')
+@jwt_required()
 def obtener_tareas():
     try:
         # obtener el id de usuario en session
-        usuario_id = 1
+        usuario_id = int(get_jwt_identity())
         tareas = Tarea.query.filter_by(usuario_id=usuario_id).all()
         return jsonify({
             'ok': True,
