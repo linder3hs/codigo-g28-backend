@@ -14,6 +14,10 @@ class Config:
 
     SECRET_KEY = os.getenv('SECRET_KEY')
 
+    # JWT
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+    JWT_ACCESS_TOKEN_EXPIRES = 3600 # 1 HORA en segundos
+
 
 class DevelopmentConfig(Config):
     DEBUG = True

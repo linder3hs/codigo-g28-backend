@@ -6,6 +6,7 @@ Jinja2==3.1.6
 MarkupSafe==3.0.3
 Werkzeug==3.1.5
 flask-migrate
+flask-jwt-extended
 flask-sqlalchemy
 psycopg2-binary
 python-dotenv

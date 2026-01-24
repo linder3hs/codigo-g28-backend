@@ -1,4 +1,3 @@
-# importar Flask
 from flask import Flask
 from config import config
 from extensions import db, migrate
@@ -6,8 +5,6 @@ from routes import auth_bp, tareas_bp
 
 
 def create_app(config_name='default'):
-    # instanciar Flask
-    # __name__ == __main__
     app = Flask(__name__)
     # estamos cargando la configuracion
     app.config.from_object(config[config_name])
