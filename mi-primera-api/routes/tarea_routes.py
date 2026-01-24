@@ -6,7 +6,7 @@ from models import Tarea, Usuario
 tareas_bp = Blueprint('tareas', __name__, url_prefix='/api/tareas')
 
 # Lista todas las tareas
-@tareas_bp.route('/api/tareas')
+@tareas_bp.route('/')
 def obtener_tareas():
     try:
         # obtener el id de usuario en session
@@ -22,7 +22,7 @@ def obtener_tareas():
 
 
 # Busca la tarea por id
-@tareas_bp.route('/api/tareas/<int:id>')
+@tareas_bp.route('/<int:id>')
 def obtener_tarea(id):
     try:
         tarea = Tarea.query.get(id)
@@ -34,7 +34,7 @@ def obtener_tarea(id):
 
 
 # Crear una nueva tarea
-@tareas_bp.route('/api/tareas', methods=['POST'])
+@tareas_bp.route('/', methods=['POST'])
 def crear_tarea():
     try:
         payload = request.get_json()
@@ -61,7 +61,7 @@ def crear_tarea():
         return jsonify({'ok': False, 'message': str(e)}), 500
 
 
-@tareas_bp.route('/api/tareas/<int:id>', methods=['PUT'])
+@tareas_bp.route('/<int:id>', methods=['PUT'])
 def actualizar_tarea(id):
     try:
         payload = request.get_json()
@@ -82,7 +82,7 @@ def actualizar_tarea(id):
         return jsonify({'ok': False, 'message': str(e)}), 500
 
 
-@tareas_bp.route('/api/tareas/<int:id>', methods=['DELETE'])
+@tareas_bp.route('/<int:id>', methods=['DELETE'])
 def eliminar_tarea(id):
     try:
         tarea = Tarea.query.get(id)
