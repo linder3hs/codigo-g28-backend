@@ -2,12 +2,9 @@
 Modelo de la base de datos
 table: tareas
 """
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from extensions import db
 
-# Crear la instancia a la base de datos
-# db = data base
-db = SQLAlchemy()
 
 class Usuario(db.Model):
     """
