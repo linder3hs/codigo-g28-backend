@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token
 from extensions import db
 from models import Usuario
 
@@ -31,7 +32,7 @@ def registro():
 
         # si llego hasta acá es un nuevo usuario y cumple con las validaciones
         password_hash = generate_password_hash(payload.get('password'))
-        
+
         nuevo_usuario = Usuario(
             nombre=payload.get('nombre'),
             email=payload.get('email'),
@@ -40,10 +41,14 @@ def registro():
         db.session.add(nuevo_usuario)
         db.session.commit()
 
+        # crear el token
+        access_token = create_access_token(identity=nuevo_usuario.id)
+
         return jsonify({
             'ok': True,
             'message': 'Usuario creado correctamente',
-            'data': nuevo_usuario.to_dict()
+            'data': nuevo_usuario.to_dict(),
+            'access_token': access_token
         }), 201
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
