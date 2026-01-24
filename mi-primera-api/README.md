@@ -10,7 +10,7 @@ Este proyecto cubre conceptos fundamentales de Flask como:
 
 - Creación de rutas (endpoints)
 - Manejo de solicitudes HTTP (GET, POST, PUT, DELETE)
-- Autenticación básica con sesiones
+- Autenticación con JWT (JSON Web Tokens)
 - Integración con bases de datos usando SQLAlchemy
 - Migraciones de base de datos con Flask-Migrate
 - Validación de datos
@@ -30,6 +30,7 @@ Este proyecto cubre conceptos fundamentales de Flask como:
 - **Flask**: Framework web para Python
 - **Flask-SQLAlchemy**: ORM para interactuar con la base de datos
 - **Flask-Migrate**: Herramienta para migraciones de base de datos
+- **Flask-JWT-Extended**: Extensión para autenticación con JWT
 - **PostgreSQL**: Base de datos relacional
 - **psycopg2-binary**: Adaptador PostgreSQL para Python
 - **python-dotenv**: Carga de variables de entorno
@@ -96,11 +97,17 @@ La aplicación se ejecutará en `http://localhost:5000` con modo debug activado,
 ```
 mi-primera-api/
 ├── app.py              # Archivo principal de la aplicación Flask
+├── config.py           # Configuraciones de la aplicación
+├── extensions.py       # Extensiones de Flask (db, jwt)
 ├── models.py           # Modelos de la base de datos (Usuario y Tarea)
 ├── requirements.txt    # Dependencias del proyecto
 ├── .env                # Variables de entorno (no subir a git)
 ├── .gitignore          # Archivos ignorados por git
 ├── README.md           # Este archivo
+├── routes/             # Rutas organizadas por módulos
+│   ├── __init__.py
+│   ├── auth_routes.py  # Endpoints de autenticación
+│   └── tarea_routes.py # Endpoints de tareas
 └── migrations/         # Migraciones de la base de datos
     ├── alembic.ini
     ├── env.py
@@ -135,7 +142,8 @@ mi-primera-api/
       "nombre": "Juan Pérez",
       "email": "juan@example.com",
       "fecha_creacion": "2023-01-01T00:00:00"
-    }
+    },
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
   }
   ```
 
@@ -159,10 +167,9 @@ mi-primera-api/
       "id": 1,
       "nombre": "Juan Pérez",
       "email": "juan@example.com",
-      "fecha_creacion": "2023-01-01T00:00:00",
-      "tareas": [],
-      "total_tarea": 0
-    }
+      "fecha_creacion": "2023-01-01T00:00:00"
+    },
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
   }
   ```
 
@@ -172,7 +179,7 @@ mi-primera-api/
 
 - **URL**: `/api/tareas`
 - **Método**: `GET`
-- **Requiere autenticación**: Sí
+- **Requiere autenticación**: Sí (JWT en header Authorization: Bearer <token>)
 - **Respuesta**:
   ```json
   {
@@ -195,6 +202,7 @@ mi-primera-api/
 - **URL**: `/api/tareas/<id>`
 - **Método**: `GET`
 - **Parámetros**: `id` (ID de la tarea)
+- **Requiere autenticación**: Sí (JWT en header Authorization: Bearer <token>)
 - **Respuesta**:
   ```json
   {
@@ -214,14 +222,13 @@ mi-primera-api/
 
 - **URL**: `/api/tareas`
 - **Método**: `POST`
-- **Requiere autenticación**: Sí (a través de usuario_id)
+- **Requiere autenticación**: Sí (JWT en header Authorization: Bearer <token>)
 - **Cuerpo**:
   ```json
   {
     "titulo": "Nueva tarea",
     "descripcion": "Descripción opcional",
-    "categoria": "Trabajo",
-    "usuario_id": 1
+    "categoria": "Trabajo"
   }
   ```
 - **Respuesta**:
@@ -244,6 +251,7 @@ mi-primera-api/
 - **URL**: `/api/tareas/<id>`
 - **Método**: `PUT`
 - **Parámetros**: `id` (ID de la tarea)
+- **Requiere autenticación**: Sí (JWT en header Authorization: Bearer <token>)
 - **Cuerpo** (campos opcionales):
   ```json
   {
@@ -257,6 +265,7 @@ mi-primera-api/
 - **URL**: `/api/tareas/<id>`
 - **Método**: `DELETE`
 - **Parámetros**: `id` (ID de la tarea)
+- **Requiere autenticación**: Sí (JWT en header Authorization: Bearer <token>)
 - **Respuesta**:
   ```json
   {
@@ -321,7 +330,8 @@ curl -X POST http://localhost:5000/api/auth/login \
 ```bash
 curl -X POST http://localhost:5000/api/tareas \
   -H "Content-Type: application/json" \
-  -d '{"titulo":"Mi tarea","usuario_id":1}'
+  -H "Authorization: Bearer <access_token>" \
+  -d '{"titulo":"Mi tarea"}'
 ```
 
 ## Aprendizajes Clave
@@ -330,7 +340,7 @@ Este proyecto te ayudará a entender:
 
 - Cómo estructurar una aplicación Flask
 - El patrón MVC básico
-- Autenticación y sesiones
+- Autenticación con JWT
 - Diseño de APIs REST
 - Trabajo con bases de datos relacionales
 - Manejo de migraciones
@@ -343,7 +353,6 @@ Este proyecto te ayudará a entender:
 Para expandir este proyecto, podrías:
 
 - Agregar más validaciones
-- Implementar JWT en lugar de sesiones
 - Agregar paginación a las listas
 - Crear un frontend con HTML/CSS/JavaScript
 - Agregar tests unitarios
