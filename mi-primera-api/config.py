@@ -16,8 +16,8 @@ class Config:
 
     # CORS
     CORS_ORIGINS = [
-        'http://localhosto:3000',
-        'http://localhosto:5173'
+        'http://localhost:3000',
+        'http://localhost:5173'
     ]
 
     # JWT
