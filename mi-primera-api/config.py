@@ -14,6 +14,12 @@ class Config:
 
     SECRET_KEY = os.getenv('SECRET_KEY')
 
+    # CORS
+    CORS_ORIGINS = [
+        'http://localhosto:3000',
+        'http://localhosto:5173'
+    ]
+
     # JWT
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     JWT_ACCESS_TOKEN_EXPIRES = 3600 # 1 HORA en segundos

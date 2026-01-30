@@ -8,5 +8,6 @@ Werkzeug==3.1.5
 flask-migrate
 flask-jwt-extended
 flask-sqlalchemy
+flask-cors
 psycopg2-binary
 python-dotenv

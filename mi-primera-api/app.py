@@ -1,6 +1,6 @@
 from flask import Flask
 from config import config
-from extensions import db, migrate, jwt
+from extensions import db, migrate, jwt, cors
 from routes import auth_bp, tareas_bp
 
 
@@ -11,6 +11,15 @@ def create_app(config_name='default'):
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
+
+    # inicializar CORS
+    cors.init_app(app, resources={
+        r'/api/*': {
+            'origin': '*', # * = TODO
+            'methods': ['GET', 'POST', 'PUT', 'DELETE'],
+            'allow_headers': ['Content-type', 'Authorization']
+        }
+    })
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(tareas_bp)
