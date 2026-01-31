@@ -13,13 +13,7 @@ def create_app(config_name='default'):
     jwt.init_app(app)
 
     # inicializar CORS
-    cors.init_app(app, resources={
-        r'/api/*': {
-            'origin': '*', # * = TODO
-            'methods': ['GET', 'POST', 'PUT', 'DELETE'],
-            'allow_headers': ['Content-type', 'Authorization']
-        }
-    })
+    cors.init_app(app, resources={r"/api/*": {"origins": "*"}})
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(tareas_bp)
