@@ -3,6 +3,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 from extensions import db
 from models import Usuario
+# importamos funciones para el envio de correos
+from utils.email import enviar_correo_verificacion, enviar_email_bienvenido 
+
 
 # crear el BluePrint (bp)
 auth_bp = Blueprint('auth', __name__, url_prefix='/api/auth')
@@ -36,19 +39,35 @@ def registro():
         nuevo_usuario = Usuario(
             nombre=payload.get('nombre'),
             email=payload.get('email'),
-            password=password_hash
+            password=password_hash,
+            verificado=False
         )
+
+        #  crear el codigo de verificacion
+        codigo = nuevo_usuario.generar_codigo_verificacion()
+
         db.session.add(nuevo_usuario)
         db.session.commit()
 
-        # crear el token
-        access_token = create_access_token(identity=str(nuevo_usuario.id))
+        # enviar el correo
+        correo_enviado = enviar_correo_verificacion(
+            nuevo_usuario.email,
+            nuevo_usuario.nombre,
+            codigo
+        )
+
+        if not correo_enviado:
+            return jsonify({
+                'ok': True,
+                'message': 'El usuairo se creo, pero hubo un error al enviar el email de verificación',
+                'data': nuevo_usuario.to_dict(),
+            }), 201
+
 
         return jsonify({
             'ok': True,
             'message': 'Usuario creado correctamente',
             'data': nuevo_usuario.to_dict(),
-            'access_token': access_token
         }), 201
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500

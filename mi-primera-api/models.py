@@ -48,7 +48,7 @@ class Usuario(db.Model):
         """
         Generar el codigo de 6 digitos
         """
-        self.codigo_verificacion = ''.join(random.choice(string.digits, k=6))
+        self.codigo_verificacion = ''.join(random.choices(string.digits, k=6))
         # vamos a definir un tiempo de expiracion 15 minutos
         self.codigo_expiracion = datetime.utcnow() + timedelta(minutes=15)
         return self.codigo_verificacion
