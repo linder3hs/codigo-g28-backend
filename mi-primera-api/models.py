@@ -53,6 +53,19 @@ class Usuario(db.Model):
         self.codigo_expiracion = datetime.utcnow() + timedelta(minutes=15)
         return self.codigo_verificacion
 
+    def verificar_codigo(self, codigo):
+        """
+        Verificar codigo
+        """
+        if not self.codigo_verificacion or not self.codigo_expiracion:
+            return False
+
+        if datetime.utcnow() > self.codigo_expiracion:
+            return False
+
+        return codigo == self.codigo_verificacion
+
+
 class Tarea(db.Model):
     """
     Modelo de Tarea
