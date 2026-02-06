@@ -2,8 +2,10 @@
 Modelo de la base de datos
 table: tareas
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from extensions import db
+import random
+import string
 
 
 class Usuario(db.Model):
@@ -18,6 +20,11 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(200), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    # verificar el usuario
+    verificado = db.Column(db.Boolean, default=False)
+    codigo_verificacion = db.Column(db.String(6))
+    codigo_expiracion = db.Column(db.DateTime)
+
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
     # relacion entre usuario y tareas
@@ -28,6 +35,7 @@ class Usuario(db.Model):
             'id': self.id,
             'nombre': self.nombre,
             'email': self.email,
+            'verificado': self.verificado,
             'fecha_creacion': self.fecha_creacion.isoformat()
         }
 
@@ -35,6 +43,15 @@ class Usuario(db.Model):
             data['tareas'] = [tarea.to_dict() for tarea in self.tareas]
             data['total_tarea'] = len(self.tareas)
         return data
+
+    def generar_codigo_verificacion(self):
+        """
+        Generar el codigo de 6 digitos
+        """
+        self.codigo_verificacion = ''.join(random.choice(string.digits, k=6))
+        # vamos a definir un tiempo de expiracion 15 minutos
+        self.codigo_expiracion = datetime.utcnow() + timedelta(minutes=15)
+        return self.codigo_verificacion
 
 class Tarea(db.Model):
     """
