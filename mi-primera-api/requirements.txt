@@ -11,3 +11,4 @@ flask-sqlalchemy
 flask-cors
 psycopg2-binary
 python-dotenv
+resend
