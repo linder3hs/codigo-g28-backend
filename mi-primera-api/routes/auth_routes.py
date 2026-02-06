@@ -116,6 +116,45 @@ def verificar_email():
         return jsonify({'ok': False, 'message': str(e)}), 500
 
 
+@auth_bp.route('/reenviar-codigo', methods=['POST'])
+def reenviar_codigo():
+    try:
+        payload = request.get_json()
+
+        if not payload.get('email'):
+            return jsonify({'ok': False, 'message': 'El email es requerido'}), 400
+
+        usuario = Usuario.query.filter_by(email=payload.get('email')).first()
+
+        if not usuario:
+            return jsonify({'ok': False, 'message': 'El usuario no existe'}), 400
+
+        # verifica si ya esta verificado
+        if usuario.verificado:
+            return jsonify({'ok': False, 'message': 'El usuario ya esta verificado!'})
+
+        # generar un NUEVO codigo
+        codigo = usuario.generar_codigo_verificacion()
+        db.session.commit()
+
+        # enviar el email
+        email_enviado = enviar_correo_verificacion(
+            usuario.email,
+            usuario.nombre,
+            codigo
+        )
+
+        if not email_enviado:
+            return jsonify({'ok': False, 'message': 'Error al enviar el email'}), 500
+
+        return jsonify({
+            'ok': True,
+            'message': 'Codigo enviado exitosamente'
+        })
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
+
 @auth_bp.route('/login', methods=['POST'])
 def login():
     """
