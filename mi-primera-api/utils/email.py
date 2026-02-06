@@ -82,3 +82,23 @@ def enviar_correo_verificacion(email, nombre, codigo):
     except Exception as e:
         print(e)
         return False
+
+def enviar_email_bienvenido(nombre):
+    try:
+        resend.api_key = current_app.config['RESEND_API_KEY']
+        html_content = f"""
+          <h1>Bienvenido!! {nombre}</h1>
+        """
+        params = {
+            "from": current_app.config['EMAIL_FROM'],
+            "to": ["linderhassingerwotdev@gmail.com"],
+            "subject": "Welcome!",
+            "html": html_content
+        }
+
+        email_enviado = resend.Emails.send(params)
+        print(email_enviado)
+        return True
+    except Exception as e:
+        print(e)
+        return False
