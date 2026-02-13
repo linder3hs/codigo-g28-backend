@@ -70,7 +70,7 @@ class Usuario(db.Model):
         return codigo == self.codigo_verificacion
 
     def generar_codigo_recuperacion(self):
-        self.codigo_recuperacion = ''.join(random.choice(string.digits, k=6))
+        self.codigo_recuperacion = ''.join(random.choices(string.digits, k=6))
         # tiempo de expiracion 15 minutos
         self.codigo_recuperacion_expiracion = datetime.utcnow() + timedelta(minutes=15)
         return self.codigo_recuperacion

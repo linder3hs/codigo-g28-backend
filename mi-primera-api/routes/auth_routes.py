@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identi
 from extensions import db
 from models import Usuario
 # importamos funciones para el envio de correos
-from utils.email import enviar_correo_verificacion, enviar_email_bienvenido 
+from utils.email import enviar_correo_verificacion, enviar_email_bienvenido, enviar_correo_recuperacion
 
 
 # crear el BluePrint (bp)
@@ -225,5 +225,67 @@ def cambiar_password():
         db.session.commit()
 
         return jsonify({'ok': True, 'message': 'Password actualizado!'})
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
+
+@auth_bp.route('/solicitar-recuperacion', methods=['POST'])
+def solicitar_recuperacion():
+    try:
+        payload = request.get_json()
+
+        if not payload.get('email'):
+            return jsonify({'ok': False, 'message': 'El email es requerido'}), 400
+
+        usuario = Usuario.query.filter_by(email=payload.get('email')).first()
+
+        if not usuario:
+            return jsonify({'ok': True, 'message': 'Se envio el codigo al correo registrado.'})
+
+        codigo = usuario.generar_codigo_recuperacion()
+        db.session.commit()
+
+        email_enviado = enviar_correo_recuperacion(usuario.nombre, codigo)
+        print(email_enviado)
+
+        return jsonify({'ok': True, 'message': 'Se envio el codigo al correo registrado.'})
+    except Exception as e:
+        return jsonify({'ok': False, 'message': str(e)}), 500
+
+
+@auth_bp.route('/restablecer-password', methods=['POST'])
+def restablecer_password():
+    try:
+        payload = request.get_json()
+
+        if not payload.get('email'):
+            return jsonify({'ok': False, 'message': 'El email es requerido'}), 400
+        
+        if not payload.get('codigo'):
+            return jsonify({'ok': False, 'message': 'El codigo es requerido'}), 400
+        
+        if not payload.get('password_nuevo'):
+            return jsonify({'ok': False, 'message': 'El password es requerido'}), 400
+
+        usuario = Usuario.query.filter_by(email=payload.get('email')).first()
+
+        if not usuario:
+            return jsonify({'ok': False, 'message': 'Error en el usuario'}), 400
+
+        if not usuario.validar_codigo_recuperacion(payload.get('codigo')):
+            return jsonify({'ok': False, 'message': 'Error en el codigo'}), 400
+
+        usuario.password = generate_password_hash(payload.get('password_nuevo'))
+        # limpiamos los valores de recuperacon
+        usuario.codigo_recuperacion = None
+        usuario.codigo_recuperacion_expiracion = None
+
+        db.session.commit()
+
+        return jsonify({
+            'ok': True,
+            'message': 'Usuario actualizado',
+            'data': usuario.to_dict()
+        })
     except Exception as e:
         return jsonify({'ok': False, 'message': str(e)}), 500
