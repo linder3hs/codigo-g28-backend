@@ -25,6 +25,10 @@ class Usuario(db.Model):
     codigo_verificacion = db.Column(db.String(6))
     codigo_expiracion = db.Column(db.DateTime)
 
+    # recuperar la contrasena
+    codigo_recuperacion = db.Column(db.String(6))
+    codigo_recuperacion_expiracion = db.Column(db.DateTime)
+
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
 
     # relacion entre usuario y tareas
@@ -64,6 +68,21 @@ class Usuario(db.Model):
             return False
 
         return codigo == self.codigo_verificacion
+
+    def generar_codigo_recuperacion(self):
+        self.codigo_recuperacion = ''.join(random.choice(string.digits, k=6))
+        # tiempo de expiracion 15 minutos
+        self.codigo_recuperacion_expiracion = datetime.utcnow() + timedelta(minutes=15)
+        return self.codigo_recuperacion
+
+    def validar_codigo_recuperacion(self, codigo):
+        if not self.codigo_recuperacion or not self.codigo_recuperacion_expiracion:
+            return False
+
+        if datetime.utcnow() > self.codigo_recuperacion_expiracion:
+            return False
+
+        return codigo == self.codigo_recuperacion
 
 
 class Tarea(db.Model):
