@@ -16,7 +16,7 @@ class TodoSerializer(serializers.ModelSerializer):
             'description',
             'category',
             'completed',
-            'createad_at',
+            'created_at',
             'user'
           ]
         read_only_fields = ['id', 'created_at', 'user']
