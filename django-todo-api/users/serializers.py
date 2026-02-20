@@ -36,6 +36,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             'username',
             'first_name',
             'email',
+            'password',
             'password_confirmation',
             'date_joined'
         ]
