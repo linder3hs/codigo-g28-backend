@@ -3,6 +3,7 @@ from .models import Todo
 from .serializers import TodoSerializer
 
 
+
 class TodoViewSet(viewsets.ModelViewSet):
     """
     Va a generar de forma automatica GET, POST, PUT/PATCH, DELETE

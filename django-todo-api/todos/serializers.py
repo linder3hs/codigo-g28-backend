@@ -14,6 +14,7 @@ class CategorySerializer(serializers.ModelSerializer):
             'created_by',
             'created_at'
         ]
+        read_only_fields = ['id', 'created_by', 'created_at']
 
 
 class TodoSerializer(serializers.ModelSerializer):
