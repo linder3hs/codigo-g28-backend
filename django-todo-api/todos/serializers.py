@@ -3,6 +3,7 @@ from .models import Todo
 from django.contrib.auth.models import User
 
 
+
 class TodoSerializer(serializers.ModelSerializer):
     """
     Clase que simular ser el to_dict() de Flask
