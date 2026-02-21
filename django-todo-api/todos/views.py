@@ -1,8 +1,10 @@
 from rest_framework import viewsets, permissions
+from drf_spectacular.utils import extend_schema
 from .models import Todo, Category
 from .serializers import TodoSerializer, CategorySerializer
 
 
+@extend_schema(tags=['Categories'])
 class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -14,6 +16,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user)
 
 
+@extend_schema(tags=['Todos'])
 class TodoViewSet(viewsets.ModelViewSet):
     """
     Va a generar de forma automatica GET, POST, PUT/PATCH, DELETE
