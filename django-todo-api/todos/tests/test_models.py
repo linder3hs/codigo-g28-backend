@@ -1,6 +1,6 @@
 import pytest
 from tests.factories import UserFactory, CategoryFactory, TodoFactory
-
+from todos.models import Category
 
 @pytest.mark.django_db
 class TestCategoryModel:
@@ -38,9 +38,7 @@ class TestCategoryModel:
         CategoryFactory(name="Hogar", created_by=user)
 
         # en teoria cuando obtenemos la lista, esta debe venir ordenada
-        categories = list(
-            type(CategoryFactory._meta.model).objects.filter(created_by=user)
-        )
+        categories = list(Category.objects.filter(created_by=user))
         # extraemos los nombres de las categorias
         names = [c.name for c in categories]
         # nombres actuales tienen el mismo orden que al usar sorted que retorne true
