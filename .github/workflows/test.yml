@@ -1,0 +1,34 @@
+name: Tests
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run unit test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: django-todo-api
+    
+    steps:
+      - name: Checkout codigo
+        uses: actions/checkout@v4
+      
+      - name: Setup python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Correr Test
+        env:
+          SECRET_KEY: "test-secret-key"
+          DEBUG: "True"
+          ALLOWED_HOSTS: "*"
+        run: pytest
