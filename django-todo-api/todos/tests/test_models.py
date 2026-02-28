@@ -71,3 +71,25 @@ class TestTodoModel:
     def test_todo_without_category(self):
         todo = TodoFactory(category=None)
         assert todo.category is None
+
+    def test_todo_can_be_completed(self):
+        todo = TodoFactory(completed=False)
+        todo.completed = True
+        todo.save()
+
+        todo.refresh_from_db()
+
+        assert todo.completed is True
+    
+    def test_todo_delete_when_use_deleted(self):
+        from todos.models import Todo
+
+        user = UserFactory()
+        TodoFactory(user=user)
+        TodoFactory(user=user)
+        TodoFactory(user=user)
+
+        user_id = user.id
+        user.delete()
+
+        assert Todo.objects.filter(user_id=user_id).count() == 0
