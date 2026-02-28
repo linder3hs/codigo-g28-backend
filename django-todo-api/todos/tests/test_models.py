@@ -61,3 +61,13 @@ class TestTodoModel:
         todo = TodoFactory(user=user)
 
         assert todo.user.username == "anderson"
+
+    def test_todo_with_category(self):
+        category = CategoryFactory(name="Hogar")
+        todo = TodoFactory(category=category)
+
+        assert todo.category.name == "Hogar"
+
+    def test_todo_without_category(self):
+        todo = TodoFactory(category=None)
+        assert todo.category is None
