@@ -93,3 +93,12 @@ class TestTodoModel:
         user.delete()
 
         assert Todo.objects.filter(user_id=user_id).count() == 0
+
+    def test_todo_category_set_null_when_category_deleted(self):
+        category = CategoryFactory()
+        todo = TodoFactory(category=category)
+
+        category.delete()
+        todo.refresh_from_db()
+
+        assert todo.category is None
