@@ -22,7 +22,7 @@ class TestCategoryModel:
         CategoryFactory(name="Unico")
         with pytest.raises(IntegrityError):
             CategoryFactory(name="Unico")
-    
+
     def test_category_belongs_to_user(self):
         """Cada categiria debe estar asociada a un usuario"""
         user = UserFactory(username="linder")
@@ -43,3 +43,21 @@ class TestCategoryModel:
         names = [c.name for c in categories]
         # nombres actuales tienen el mismo orden que al usar sorted que retorne true
         assert names == sorted(names)
+
+
+@pytest.mark.django_db
+class TestTodoModel:
+
+    def test_todo_creation(self):
+        todo = TodoFactory(title="Aprendiendo Django")
+
+        assert todo.id is not None
+        assert todo.title == "Aprendiendo Django"
+        assert todo.completed is False
+        assert todo.created_at is not None
+
+    def test_todo_belongs_user(self):
+        user = UserFactory(username="anderson")
+        todo = TodoFactory(user=user)
+
+        assert todo.user.username == "anderson"
