@@ -22,3 +22,26 @@ class TestCategoryModel:
         CategoryFactory(name="Unico")
         with pytest.raises(IntegrityError):
             CategoryFactory(name="Unico")
+    
+    def test_category_belongs_to_user(self):
+        """Cada categiria debe estar asociada a un usuario"""
+        user = UserFactory(username="linder")
+        category = CategoryFactory(created_by=user)
+
+        assert category.created_by.username == "linder"
+
+    def test_category_ordering(self):
+        """Porbar que el order del modelo funcione correctamente"""
+        user = UserFactory()
+        CategoryFactory(name="Pagos", created_by=user)
+        CategoryFactory(name="Compras", created_by=user)
+        CategoryFactory(name="Hogar", created_by=user)
+
+        # en teoria cuando obtenemos la lista, esta debe venir ordenada
+        categories = list(
+            type(CategoryFactory._meta.model).objects.filter(created_by=user)
+        )
+        # extraemos los nombres de las categorias
+        names = [c.name for c in categories]
+        # nombres actuales tienen el mismo orden que al usar sorted que retorne true
+        assert names == sorted(names)
