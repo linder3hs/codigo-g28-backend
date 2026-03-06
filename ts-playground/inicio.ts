@@ -39,3 +39,14 @@ const persona2: Person = {
   esMayor: true,
   edad: 88,
 };
+
+function calcularTotal(
+  precio: number,
+  cantidad: number,
+  cliente: string,
+): string {
+  const total = precio * cantidad;
+  return `Cliente: ${cliente}\nTotal: ${total}`;
+}
+
+console.log(calcularTotal(10, 5, "Pepe"));
