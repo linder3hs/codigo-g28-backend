@@ -50,3 +50,15 @@ function calcularTotal(
 }
 
 console.log(calcularTotal(10, 5, "Pepe"));
+
+type TaskStatus = "pending" | "completed" | "cancelled";
+let status: TaskStatus = "completed";
+status = "cancelled";
+status = "pending";
+
+type UserId = number;
+type StringOrNull = string | null;
+let userId1: UserId = 10;
+
+let texto: StringOrNull = null;
+texto = "hola mundo";
