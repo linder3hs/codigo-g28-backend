@@ -12,11 +12,11 @@ jobs:
     defaults:
       run:
         working-directory: django-todo-api
-    
+
     steps:
       - name: Checkout codigo
         uses: actions/checkout@v4
-      
+
       - name: Setup python 3.12
         uses: actions/setup-python@v5
         with:
