@@ -26,9 +26,9 @@ interface Person {
 }
 
 const persona1: Person = {
-  nombre: "Linder",
   apellido: "Hassinger",
   edad: 99,
+  nombre: "Linder",
   esMayor: true,
   celular: 99999,
 };
