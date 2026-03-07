@@ -2,6 +2,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { swaggerSpec } from "./lib/swagger";
 import productRoutes from "./routes/product.routes";
+import categoryRoutes from "./routes/category.routes";
 
 const app = express();
 const PORT = 3000;
@@ -13,6 +14,7 @@ app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ─── Rutas ─────────────────────────────────────────────────────────────────
 app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
 
 // ─── Health check ──────────────────────────────────────────────────────────
 app.get("/api/test", function (request, response) {
