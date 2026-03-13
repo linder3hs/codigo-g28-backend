@@ -47,4 +47,26 @@ export class OrderController {
       res.status(500).json({ ok: false, error: error.message });
     }
   }
+
+  async updateStatus(req: AuthRequest, res: Response) {
+    try {
+      const id = Number(req.params.id);
+      const { status } = req.body;
+      const order = await service.updateStatus(id, status);
+      res.json({ ok: true, data: order });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  }
+
+  async destroy(req: AuthRequest, res: Response) {
+    try {
+      const id = Number(req.params.id);
+
+      await service.destroy(id);
+      res.json({ ok: true, data: "Order deleted" });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  }
 }
