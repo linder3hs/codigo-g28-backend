@@ -62,7 +62,6 @@ export class OrderController {
   async destroy(req: AuthRequest, res: Response) {
     try {
       const id = Number(req.params.id);
-
       await service.destroy(id);
       res.json({ ok: true, data: "Order deleted" });
     } catch (error: any) {
