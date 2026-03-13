@@ -299,6 +299,128 @@ const options: swaggerJsdoc.Options = {
             message: { type: "string", example: "Token expirado" },
           },
         },
+
+        // ── Orders schemas ───────────────────────────────────────────────────
+        OrderItem: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            orderId: { type: "integer", example: 1 },
+            productId: { type: "integer", example: 3 },
+            quantity: { type: "integer", example: 2 },
+            unitPrice: { type: "number", format: "float", example: 1299.99 },
+            products: { $ref: "#/components/schemas/Product" },
+          },
+        },
+        Order: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            userId: { type: "integer", example: 1 },
+            total: { type: "number", format: "float", example: 2599.98 },
+            status: {
+              type: "string",
+              enum: ["PENDING", "COMPLETED", "CANCELLED"],
+              example: "PENDING",
+            },
+            createdAt: {
+              type: "string",
+              format: "date-time",
+              example: "2026-03-12T00:00:00.000Z",
+            },
+            users: {
+              type: "object",
+              properties: {
+                id: { type: "integer", example: 1 },
+                username: { type: "string", example: "john_doe" },
+                email: {
+                  type: "string",
+                  format: "email",
+                  example: "john@example.com",
+                },
+              },
+            },
+            order_items: {
+              type: "array",
+              items: { $ref: "#/components/schemas/OrderItem" },
+            },
+          },
+        },
+        OrderItemInput: {
+          type: "object",
+          required: ["productId", "quantity"],
+          properties: {
+            productId: { type: "integer", example: 3 },
+            quantity: { type: "integer", minimum: 1, example: 2 },
+          },
+        },
+        OrderCreateInput: {
+          type: "object",
+          required: ["items"],
+          properties: {
+            items: {
+              type: "array",
+              minItems: 1,
+              items: { $ref: "#/components/schemas/OrderItemInput" },
+              example: [
+                { productId: 1, quantity: 2 },
+                { productId: 3, quantity: 1 },
+              ],
+            },
+          },
+        },
+        OrderStatusUpdateInput: {
+          type: "object",
+          required: ["status"],
+          properties: {
+            status: {
+              type: "string",
+              enum: ["PENDING", "COMPLETED", "CANCELLED"],
+              example: "COMPLETED",
+            },
+          },
+        },
+        OrderSuccessListResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", example: true },
+            data: {
+              type: "array",
+              items: { $ref: "#/components/schemas/Order" },
+            },
+          },
+        },
+        OrderSuccessItemResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", example: true },
+            data: { $ref: "#/components/schemas/Order" },
+          },
+        },
+        OrderDeleteResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", example: true },
+            data: { type: "string", example: "Order deleted" },
+          },
+        },
+        OrderNotFoundResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", example: false },
+            data: { type: "string", example: "Order not found" },
+          },
+        },
+        OrderBadRequestResponse: {
+          type: "object",
+          properties: {
+            ok: { type: "boolean", example: false },
+            data: {
+              type: "string",
+              example: "Se require al menos 1 item para crear la orden.",
+            },
+          },
+        },
       },
 
       // ── Security schemes ───────────────────────────────────────────────────
@@ -788,6 +910,259 @@ const options: swaggerJsdoc.Options = {
                   schema: {
                     $ref: "#/components/schemas/CategoryDeleteResponse",
                   },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      // ── Orders ───────────────────────────────────────────────────────────
+      "/api/orders": {
+        get: {
+          summary: "Obtener todas las órdenes",
+          tags: ["Orders"],
+          description:
+            "Retorna la lista completa de órdenes ordenadas por fecha de creación (más reciente primero), incluyendo el usuario y los items con sus productos. **Requiere token JWT.**",
+          security: [{ BearerAuth: [] }],
+          responses: {
+            200: {
+              description: "Lista de órdenes obtenida exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderSuccessListResponse",
+                  },
+                },
+              },
+            },
+            401: {
+              description: "No autorizado — token ausente, inválido o expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UnauthorizedResponse" },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+        post: {
+          summary: "Crear una nueva orden",
+          tags: ["Orders"],
+          description:
+            "Crea una nueva orden para el usuario autenticado. Se debe enviar un array `items` con al menos un producto. El `total` se calcula automáticamente según el precio de cada producto y la cantidad solicitada. **Requiere token JWT.**",
+          security: [{ BearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/OrderCreateInput" },
+              },
+            },
+          },
+          responses: {
+            201: {
+              description: "Orden creada exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderSuccessItemResponse",
+                  },
+                },
+              },
+            },
+            400: {
+              description:
+                "Petición inválida — se requiere al menos 1 item en el array",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderBadRequestResponse",
+                  },
+                },
+              },
+            },
+            401: {
+              description: "No autorizado — token ausente, inválido o expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UnauthorizedResponse" },
+                },
+              },
+            },
+            500: {
+              description:
+                "Error interno del servidor (ej. producto no encontrado)",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      "/api/orders/{id}": {
+        get: {
+          summary: "Obtener una orden por ID",
+          tags: ["Orders"],
+          description:
+            "Retorna una orden específica con su usuario y los items con sus productos. **Requiere token JWT.**",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+              description: "ID numérico de la orden",
+              example: 1,
+            },
+          ],
+          responses: {
+            200: {
+              description: "Orden encontrada exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderSuccessItemResponse",
+                  },
+                },
+              },
+            },
+            401: {
+              description: "No autorizado — token ausente, inválido o expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UnauthorizedResponse" },
+                },
+              },
+            },
+            404: {
+              description: "Orden no encontrada",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderNotFoundResponse",
+                  },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+        delete: {
+          summary: "Eliminar una orden",
+          tags: ["Orders"],
+          description:
+            "Elimina permanentemente una orden y todos sus items asociados. **Requiere token JWT.**",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+              description: "ID numérico de la orden a eliminar",
+              example: 1,
+            },
+          ],
+          responses: {
+            200: {
+              description: "Orden eliminada exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderDeleteResponse",
+                  },
+                },
+              },
+            },
+            401: {
+              description: "No autorizado — token ausente, inválido o expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UnauthorizedResponse" },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+      },
+
+      "/api/orders/{id}/status": {
+        patch: {
+          summary: "Actualizar el estado de una orden",
+          tags: ["Orders"],
+          description:
+            "Actualiza el campo `status` de una orden existente. Los valores permitidos son `PENDING`, `COMPLETED` y `CANCELLED`. **Requiere token JWT.**",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+              description: "ID numérico de la orden a actualizar",
+              example: 1,
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/OrderStatusUpdateInput" },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Estado de la orden actualizado exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    $ref: "#/components/schemas/OrderSuccessItemResponse",
+                  },
+                },
+              },
+            },
+            401: {
+              description: "No autorizado — token ausente, inválido o expirado",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/UnauthorizedResponse" },
                 },
               },
             },
