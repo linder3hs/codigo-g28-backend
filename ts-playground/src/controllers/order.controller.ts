@@ -7,7 +7,9 @@ const service = new OrderService();
 export class OrderController {
   async getAll(req: AuthRequest, res: Response) {
     try {
-      const orders = await service.getAll();
+      const userId = req.user!.id;
+      const rol = req.user!.rol;
+      const orders = await service.getAll(userId, rol);
       res.json({ ok: true, data: orders });
     } catch (error: any) {
       res.status(500).json({ ok: false, error: error.message });
@@ -17,7 +19,9 @@ export class OrderController {
   async getById(req: AuthRequest, res: Response) {
     try {
       const id = Number(req.params.id);
-      const order = await service.getById(id);
+      const userId = req.user!.id;
+      const rol = req.user!.rol;
+      const order = await service.getById(id, userId, rol);
 
       if (!order) {
         return res.status(404).json({ ok: false, data: "Order not found" });
@@ -59,13 +63,43 @@ export class OrderController {
     }
   }
 
-  async destroy(req: AuthRequest, res: Response) {
+  async cancelOrder(req: AuthRequest, res: Response) {
     try {
       const id = Number(req.params.id);
-      await service.destroy(id);
-      res.json({ ok: true, data: "Order deleted" });
+      const userId = req.user!.id;
+      const order = await service.cancelOrder(id, userId);
+      res.json({ ok: true, data: order });
     } catch (error: any) {
       res.status(500).json({ ok: false, error: error.message });
     }
   }
+
+  async softDelete(req: AuthRequest, res: Response) {
+    try {
+      const id = Number(req.params.id);
+      const order = await service.softDelete(id);
+      res.json({ ok: true, data: order });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  }
+
+  async getArchived(req: AuthRequest, res: Response) {
+    try {
+      const orders = await service.getArchived();
+      res.json({ ok: true, data: orders });
+    } catch (error: any) {
+      res.status(500).json({ ok: false, error: error.message });
+    }
+  }
+
+  // async destroy(req: AuthRequest, res: Response) {
+  //   try {
+  //     const id = Number(req.params.id);
+  //     await service.destroy(id);
+  //     res.json({ ok: true, data: "Order deleted" });
+  //   } catch (error: any) {
+  //     res.status(500).json({ ok: false, error: error.message });
+  //   }
+  // }
 }

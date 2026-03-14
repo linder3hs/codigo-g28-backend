@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { Roles } from "../types";
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
@@ -7,7 +8,7 @@ export interface AuthRequest extends Request {
   user?: {
     id: number;
     email: string;
-    rol: string;
+    rol: Roles;
   };
 }
 
