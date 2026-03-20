@@ -38,6 +38,50 @@ export class PaymentService {
     if (order.status !== "PENDING") {
       throw new Error("Solo se puede pagar ordenes en estado PENDIENTE");
     }
+
+    // 2: Construir los items para MP
+    const items = order.order_items.map((item) => {
+      return {
+        id: String(item.productId),
+        title: item.products.name,
+        description: item.products?.description ?? "",
+        quantity: item.quantity,
+        unit_price: Number(item.unitPrice),
+        currency_id: "PEN", // SOLES PERUANOS
+      };
+    });
+
+    // 3: Construir el preference para MP
+    const response = await preferenceApi.create({
+      body: {
+        items,
+        payer: { email: userEmail },
+        external_reference: String(order.id),
+        back_urls: {
+          success: `${process.env.FRONT_URL}/payment/success`,
+          pending: `${process.env.FRONT_URL}/payment/pending`,
+          failure: `${process.env.FRONT_URL}/payment/failure`,
+        },
+        auto_return: "approved",
+        notification_url: `${process.env.BACK_URL}/api/payment/webhook`,
+        statement_descriptor: "G28 Shop",
+        metadata: {
+          order_id: orderId,
+          user_id: userId,
+        },
+      },
+    });
+
+    await prisma.orders.update({
+      where: { id: orderId },
+      data: { mpPreferenceId: response.id },
+    });
+
+    return {
+      preferenceId: response.id,
+      initPoint: response.init_point,
+      sandBoxInitPoint: response.sandbox_init_point,
+    };
   }
 
   async handleWebhook() {}
