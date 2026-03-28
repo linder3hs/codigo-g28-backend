@@ -852,6 +852,125 @@ const options: swaggerJsdoc.Options = {
           },
         },
       },
+      "/api/products/{id}/image": {
+        post: {
+          summary: "Subir imagen al producto",
+          tags: ["Products"],
+          description:
+            "Sube una imagen a S3 y la asocia al producto. Sobrescribe la imagen anterior si existe. Requiere token de autorización.",
+          security: [{ BearerAuth: [] }],
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+              description: "ID numérico del producto",
+              example: 1,
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "multipart/form-data": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    image: {
+                      type: "string",
+                      format: "binary",
+                      description: "Archivo de imagen a subir",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            200: {
+              description: "Imagen subida exitosamente",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/SuccessItemResponse" },
+                },
+              },
+            },
+            400: {
+              description: "Archivo no proporcionado o producto inexistente",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+        get: {
+          summary: "Obtener la URL de la imagen del producto",
+          tags: ["Products"],
+          description:
+            "Genera y retorna una URL firmada de S3 para visualizar la imagen del producto.",
+          parameters: [
+            {
+              in: "path",
+              name: "id",
+              required: true,
+              schema: { type: "integer" },
+              description: "ID numérico del producto",
+              example: 1,
+            },
+          ],
+          responses: {
+            200: {
+              description: "URL de la imagen generada exitosamente",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      ok: { type: "boolean", example: true },
+                      data: {
+                        type: "object",
+                        properties: {
+                          imageUrl: {
+                            type: "string",
+                            example:
+                              "https://my-bucket.s3.amazonaws.com/products/123.jpg?Signature=...",
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            400: {
+              description: "Producto no encontrado o no tiene imagen",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+            500: {
+              description: "Error interno del servidor",
+              content: {
+                "application/json": {
+                  schema: { $ref: "#/components/schemas/ErrorResponse" },
+                },
+              },
+            },
+          },
+        },
+      },
       "/api/categories": {
         get: {
           summary: "Obtener todas las categorías",
